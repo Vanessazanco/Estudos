@@ -28,7 +28,6 @@ public class MateriaController {
         this.professorRepository = professorRepository;
     }
 
-
     /* O método cadastrarMateria salva a nova instância de Materia no banco de dados.
     Após salvar, cria uma URI para o novo recurso usando ServletUriComponentsBuilder.
     Retorna uma resposta HTTP com status 201 (Created) e a localização do novo recurso no cabeçalho Location.
