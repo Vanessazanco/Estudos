@@ -10,7 +10,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 
 @RestController
-@RequestMapping("materias")
+@RequestMapping("/materia")
 public class MateriaController {
 
     @Autowired
@@ -30,26 +30,14 @@ public class MateriaController {
         return ResponseEntity.created(uri).build();
     }
 
-    //recupera um professor pelo ID da matéria
-    @GetMapping("/materia/{id}")
-    public ResponseEntity<String> listarProfessorPorID(@PathVariable Long id) {
-        var materia = materiaRepository.findById(id);
-        if (materia.isPresent()) {
-            String professor = materia.get().getProfessor();
-            return ResponseEntity.ok(professor);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @GetMapping("/materia/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Materia> listarPorId(@PathVariable Long id) {
         return materiaRepository.findById(id)
                 .map(materia -> ResponseEntity.ok(materia))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/materia/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Materia> atualizarMateria(@PathVariable Long id, @RequestBody Materia novosDados) {
         return materiaRepository.findById(id)
                 .map(materiaExistente -> {

@@ -2,13 +2,13 @@ package com.br.estudos.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Table(name = "materias")
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Getter
-@Setter
+@Data
 public class Materia {
 
     @Id
@@ -16,8 +16,5 @@ public class Materia {
     private Long id;
     private String nomeMateria;
     private String professor;
-
-    public Materia(Materia materia) {
-    }
 
 }
