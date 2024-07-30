@@ -5,6 +5,9 @@ import com.br.estudos.repository.MateriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping("materias")
@@ -13,9 +16,18 @@ public class MateriaController {
     @Autowired
     private MateriaRepository materiaRepository;
 
-    @PostMapping
-    public void cadastrarMateria(@RequestBody Materia materia) {
-        materiaRepository.save(materia);
+    /* O método cadastrarMateria salva a nova instância de Materia no banco de dados.
+    Após salvar, cria uma URI para o novo recurso usando ServletUriComponentsBuilder.
+    Retorna uma resposta HTTP com status 201 (Created) e a localização do novo recurso no cabeçalho Location.
+    */
+    @PostMapping("/materia")
+    public ResponseEntity<Void> cadastrarMateria(@RequestBody Materia materia) {
+        Materia materiaSalva = materiaRepository.save(materia);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(materiaSalva.getId())
+                .toUri();
+        return ResponseEntity.created(uri).build();
     }
 
     //recupera um professor pelo ID da matéria
@@ -30,10 +42,11 @@ public class MateriaController {
         }
     }
 
-    @GetMapping("/{id}")
-    public Materia listarPorId(@PathVariable Long id) {
-        var materia = materiaRepository.getReferenceById(id);
-        return new Materia(materia);
+    @GetMapping("/materia/{id}")
+    public ResponseEntity<Materia> listarPorId(@PathVariable Long id) {
+        return materiaRepository.findById(id)
+                .map(materia -> ResponseEntity.ok(materia))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PutMapping("/materia/{id}")
