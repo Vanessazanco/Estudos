@@ -16,4 +16,7 @@ public class Materia {
     private Long id;
     private String nomeMateria;
     private String professor;
+
+    public Materia(Materia materia) {
+    }
 }

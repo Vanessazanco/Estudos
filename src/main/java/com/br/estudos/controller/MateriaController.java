@@ -29,4 +29,10 @@ public class MateriaController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/{id}")
+    public Materia listarPorId(@PathVariable Long id) {
+        var materia = materiaRepository.getReferenceById(id);
+        return new Materia(materia);
+    }
 }
