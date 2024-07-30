@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.*;
 public class MateriaController {
 
     @Autowired
-    private MateriaRepository  materiaRepository;
+    private MateriaRepository materiaRepository;
 
     @PostMapping
-    public void cadastrarMateria(@RequestBody Materia materia){
+    public void cadastrarMateria(@RequestBody Materia materia) {
         materiaRepository.save(materia);
     }
 
@@ -35,4 +35,19 @@ public class MateriaController {
         var materia = materiaRepository.getReferenceById(id);
         return new Materia(materia);
     }
+
+    @PutMapping("/materia/{id}")
+    public ResponseEntity<Materia> atualizarMateria(@PathVariable Long id, @RequestBody Materia novosDados) {
+        return materiaRepository.findById(id)
+                .map(materiaExistente -> {
+                    materiaExistente.setNomeMateria(novosDados.getNomeMateria());
+                    materiaExistente.setProfessor(novosDados.getProfessor());
+                    Materia materiaAtualizada = materiaRepository.save(materiaExistente);
+                    return ResponseEntity.ok(materiaAtualizada);
+                })
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
 }
+
+
